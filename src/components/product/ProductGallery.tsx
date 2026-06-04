@@ -11,7 +11,21 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
   const [active, setActive] = useState(0);
   const [zoomed, setZoomed] = useState(false);
 
-  const allImages = images.length > 1 ? images : [images[0], `${images[0]}?2`, `${images[0]}?3`];
+  const allImages = images.length > 1
+    ? images
+    : (() => {
+        // Extract seed from picsum URL (e.g. "yarn-p09") and generate variants
+        const match = images[0].match(/\/seed\/([^/]+)\//);
+        if (match) {
+          const base = `https://picsum.photos/seed`;
+          return [
+            images[0],
+            `${base}/${match[1]}-b/600/800`,
+            `${base}/${match[1]}-c/600/800`,
+          ];
+        }
+        return [images[0], images[0], images[0]];
+      })();
 
   return (
     <>
@@ -27,7 +41,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                 active === i ? 'border-charcoal' : 'border-transparent hover:border-linen'
               }`}
             >
-              <img src={src.replace('?2', '').replace('?3', '')} alt="" className="w-full h-full object-cover" />
+              <img src={src} alt="" className="w-full h-full object-cover" />
             </button>
           ))}
         </div>
@@ -39,7 +53,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
           onClick={() => setZoomed(true)}
         >
           <img
-            src={allImages[active].replace('?2', '').replace('?3', '')}
+            src={allImages[active]}
             alt={productName}
             className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           />
@@ -56,7 +70,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
               style={{ aspectRatio: '3/4' }}
             >
               <img
-                src={src.replace('?2', '').replace('?3', '')}
+                src={src}
                 alt={productName}
                 className="w-full h-full object-cover"
               />
@@ -83,7 +97,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
           onClick={() => setZoomed(false)}
         >
           <img
-            src={allImages[active].replace('?2', '').replace('?3', '')}
+            src={allImages[active]}
             alt={productName}
             className="max-h-[90vh] max-w-[90vw] object-contain"
           />
