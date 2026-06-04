@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Upload, Sparkles, ArrowRight, RotateCcw, Lock } from 'lucide-react';
+import { X, Upload, Sparkles, ArrowRight, RotateCcw, Lock, ExternalLink } from 'lucide-react';
+import Link from 'next/link';
 import { useAI } from '@/contexts/AIContext';
 import { products } from '@/lib/mock-data/products';
 
@@ -207,27 +208,38 @@ export function AIPanel() {
                   </div>
 
                   {/* Recommendation card */}
-                  <div
-                    className="rounded-2xl overflow-hidden shadow-lg"
+                  <Link
+                    href={`/products/${mockRecommendation.slug}`}
+                    onClick={closePanel}
+                    className="block rounded-2xl overflow-hidden shadow-lg group transition-all duration-200"
                     style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)' }}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.11)';
+                      (e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,110,138,0.5)';
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.07)';
+                      (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.12)';
+                    }}
                   >
                     <div className="flex gap-0">
                       <div className="w-20 shrink-0">
                         <img
                           src={mockRecommendation.images[0]}
                           alt={mockRecommendation.name}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                           style={{ minHeight: '90px' }}
                         />
                       </div>
                       <div className="flex-1 p-3">
-                        <div className="flex items-center gap-1.5 mb-1">
+                        <div className="flex items-center justify-between mb-1">
                           <span
                             className="font-body text-[9px] uppercase tracking-widest px-1.5 py-0.5 rounded-sm"
                             style={{ background: 'rgba(90,160,140,0.25)', color: '#90c4b4' }}
                           >
                             Rekomendacja
                           </span>
+                          <ExternalLink size={11} className="opacity-0 group-hover:opacity-60 transition-opacity" style={{ color: 'rgba(255,255,255,0.7)' }} />
                         </div>
                         <p className="font-display text-white text-base leading-tight">
                           {mockRecommendation.name}
@@ -241,32 +253,66 @@ export function AIPanel() {
                       </div>
                     </div>
                     <div
-                      className="px-3 py-2.5 font-body text-xs leading-relaxed"
+                      className="px-3 py-2.5 font-body text-xs leading-relaxed flex items-center justify-between"
                       style={{ borderTop: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.6)' }}
                     >
-                      Gauge identyczne z wzorem. {mockRecommendation.composition[0]} zachowa ciepło i kształt swetra.
+                      <span>Gauge identyczne z wzorem. {mockRecommendation.composition[0]} zachowa ciepło i kształt swetra.</span>
+                      <span className="shrink-0 ml-3 font-body text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap" style={{ color: 'rgba(74,160,138,0.9)' }}>
+                        Zobacz →
+                      </span>
                     </div>
-                  </div>
+                  </Link>
 
                   {/* Alternatives */}
                   <div
                     className="rounded-2xl rounded-tl-sm px-4 py-3 space-y-2"
                     style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.10)' }}
                   >
-                    <p className="font-body text-[10px] uppercase tracking-widest mb-2" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                    <p className="font-body text-[10px] uppercase tracking-widest mb-3" style={{ color: 'rgba(255,255,255,0.35)' }}>
                       Alternatywy
                     </p>
-                    {[mockAlt1, mockAlt2].map((alt, i) => (
-                      <div key={i} className="flex items-center gap-2">
-                        <div className="w-1 h-1 rounded-full shrink-0" style={{ background: 'rgba(255,255,255,0.3)' }} />
-                        <p className="font-body text-sm" style={{ color: 'rgba(255,255,255,0.65)' }}>
-                          {alt.name}{' '}
-                          <span style={{ color: 'rgba(255,255,255,0.35)' }}>
-                            ({alt.weight}, {alt.gauge.stitches} st
-                            {i === 1 ? ' — gauge lekko inny' : ''})
+                    {[
+                      { product: mockAlt1, note: null },
+                      { product: mockAlt2, note: 'gauge lekko inny' },
+                    ].map(({ product: alt, note }, i) => (
+                      <Link
+                        key={i}
+                        href={`/products/${alt.slug}`}
+                        onClick={closePanel}
+                        className="flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 group transition-all duration-150"
+                        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid transparent' }}
+                        onMouseEnter={(e) => {
+                          (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.09)';
+                          (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.12)';
+                        }}
+                        onMouseLeave={(e) => {
+                          (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.04)';
+                          (e.currentTarget as HTMLElement).style.borderColor = 'transparent';
+                        }}
+                      >
+                        <div className="flex items-center gap-2 min-w-0">
+                          <img
+                            src={alt.images[0]}
+                            alt={alt.name}
+                            className="w-8 h-10 object-cover rounded shrink-0"
+                          />
+                          <div className="min-w-0">
+                            <p className="font-body text-sm truncate" style={{ color: 'rgba(255,255,255,0.8)' }}>
+                              {alt.name}
+                            </p>
+                            <p className="font-body text-[11px]" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                              {alt.weight} · {alt.gauge.stitches} st
+                              {note && <span style={{ color: 'rgba(255,160,80,0.7)' }}> · {note}</span>}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 shrink-0">
+                          <span className="font-body text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                            {alt.price} zł
                           </span>
-                        </p>
-                      </div>
+                          <ArrowRight size={13} className="opacity-0 group-hover:opacity-60 transition-opacity -translate-x-1 group-hover:translate-x-0 duration-150" style={{ color: 'rgba(255,255,255,0.7)' }} />
+                        </div>
+                      </Link>
                     ))}
                   </div>
 
