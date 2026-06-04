@@ -1,26 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  --color-cream: #F4EFE6;
+  --color-parchment: #EDE5D8;
+  --color-linen: #D9CFC1;
+  --color-warm-grey: #8A8178;
+  --color-charcoal: #2C2A27;
+  --color-forest: #2D4A3E;
+  --color-forest-light: #3D6354;
+  --color-terracotta: #B85C38;
+  --color-terracotta-light: #D4703F;
+  --color-sage: #7A9E8E;
+  --color-sage-light: #B2CEBF;
+  --color-ai-accent: #4A6E8A;
+  --color-ai-light: #EEF3F7;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --max-width-content: 1280px;
+  --max-width-text: 680px;
+
+  --animate-marquee: marquee 60s linear infinite;
+  --animate-slide-in: slideIn 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  --animate-fade-up: fadeUp 0.6s ease forwards;
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  @keyframes slideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 }
 
+:root {
+  --color-cream: #F4EFE6;
+  --color-parchment: #EDE5D8;
+  --color-linen: #D9CFC1;
+  --color-warm-grey: #8A8178;
+  --color-charcoal: #2C2A27;
+  --color-forest: #2D4A3E;
+  --color-terracotta: #B85C38;
+  --color-sage: #7A9E8E;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-cream);
+  color: var(--color-charcoal);
+  font-family: 'DM Sans', system-ui, sans-serif;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
 }

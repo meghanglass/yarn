@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Yarn Over — Prototyp e-commerce
 
-## Getting Started
+Prototyp sklepu z włóczkami zbudowany w Next.js 16 (App Router) z TypeScript i Tailwind CSS v4.
 
-First, run the development server:
+## Jak odpalić
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Otwórz [http://localhost:3000](http://localhost:3000) w przeglądarce.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Struktura folderów
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/
+│   ├── layout.tsx
+│   ├── page.tsx
+│   ├── globals.css
+│   ├── collections/[slug]/page.tsx
+│   └── products/[slug]/page.tsx
+├── components/
+│   ├── layout/        # Header, Footer, Navigation
+│   ├── home/          # Sekcje strony głównej
+│   ├── product/       # Karty i strony produktów
+│   ├── ai/            # Komponenty AI asystenta
+│   └── ui/            # Reużywalne elementy UI
+└── lib/
+    ├── mock-data/
+    │   ├── products.ts    # 20 produktów włóczkowych
+    │   └── collections.ts # 5 kolekcji
+    └── types.ts           # Typy TypeScript
+```
 
-## Learn More
+## Stack technologiczny
 
-To learn more about Next.js, take a look at the following resources:
+- **Next.js 16** — App Router, Server Components
+- **TypeScript** — pełne typowanie
+- **Tailwind CSS v4** — konfiguracja przez @theme w CSS
+- **Radix UI** — dostępne komponenty (Dialog, Select, Tabs, Tooltip)
+- **Framer Motion** — animacje
+- **Lucide React** — ikony
+- **next-themes** — dark/light mode
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Dane testowe
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+20 produktów włóczkowych w 5 wagach:
+- 2 × lace (Hazel Knits, Malabrigo)
+- 4 × fingering (Drops, Lang Yarns)
+- 6 × DK (Istex, Drops, BC Garn)
+- 5 × worsted (Cascade, Rowan, Schoppel)
+- 3 × bulky (Drops, Katia)
 
-## Deploy on Vercel
+## Następne kroki
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Zbudować layout (Header, Footer, Navigation)
+2. Zbudować stronę główną (Hero, Kolekcje, Produkty, Marquee)
+3. Zbudować stronę produktu
+4. Dodać AI asystenta
