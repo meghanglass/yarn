@@ -10,13 +10,6 @@ type ProjectType = 'Sweter' | 'Czapka' | 'Koc' | 'Skarpety' | 'Inne';
 
 const projectTypes: ProjectType[] = ['Sweter', 'Czapka', 'Koc', 'Skarpety', 'Inne'];
 
-const projectIcons: Record<ProjectType, string> = {
-  Sweter: '🧥',
-  Czapka: '🧢',
-  Koc: '🛏',
-  Skarpety: '🧦',
-  Inne: '✦',
-};
 
 const mockRecommendation = products.find((p) => p.id === 'p09') ?? products[0];
 const mockAlt1 = products.find((p) => p.id === 'p12') ?? products[1];
@@ -170,7 +163,6 @@ export function AIPanel() {
                   className="max-w-[80%] rounded-2xl rounded-tr-sm px-4 py-3 font-body text-sm text-white"
                   style={{ background: 'rgba(74,110,138,0.45)', border: '1px solid rgba(74,110,138,0.4)' }}
                 >
-                  {selectedProject && <span className="mr-1">{projectIcons[selectedProject]}</span>}
                   {prompt || selectedProject}
                 </div>
               </div>
@@ -186,7 +178,6 @@ export function AIPanel() {
                   className="max-w-[80%] rounded-2xl rounded-tr-sm px-4 py-3 font-body text-sm text-white"
                   style={{ background: 'rgba(74,110,138,0.45)', border: '1px solid rgba(74,110,138,0.4)' }}
                 >
-                  {selectedProject && <span className="mr-1">{projectIcons[selectedProject]}</span>}
                   {prompt || selectedProject}
                 </div>
               </div>
@@ -357,7 +348,7 @@ export function AIPanel() {
                     <button
                       key={pt}
                       onClick={() => setSelectedProject(pt === selectedProject ? null : pt)}
-                      className="font-body text-sm px-3.5 py-1.5 rounded-full transition-all duration-200 flex items-center gap-1.5"
+                      className="font-body text-sm px-3.5 py-1.5 rounded-full transition-all duration-200"
                       style={
                         selectedProject === pt
                           ? {
@@ -373,7 +364,6 @@ export function AIPanel() {
                             }
                       }
                     >
-                      <span>{projectIcons[pt]}</span>
                       {pt}
                     </button>
                   ))}
