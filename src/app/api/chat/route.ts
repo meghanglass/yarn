@@ -182,11 +182,48 @@ interface ProductContext {
   gauge: number;
 }
 
+// ─── Build Anthropic messages — inject PDF into first user message ──────────
+
+type AnthropicMessage = Parameters<typeof client.messages.create>[0]['messages'][number];
+
+function buildAnthropicMessages(
+  messages: ChatMessage[],
+  pdfData?: string
+): AnthropicMessage[] {
+  return messages.map((msg, idx) => {
+    // PDF is attached only to the very first user message
+    if (idx === 0 && msg.role === 'user' && pdfData) {
+      return {
+        role: 'user',
+        content: [
+          {
+            type: 'document',
+            source: {
+              type: 'base64',
+              media_type: 'application/pdf',
+              data: pdfData,
+            },
+          } as const,
+          {
+            type: 'text',
+            text: msg.content,
+          },
+        ],
+      };
+    }
+    return { role: msg.role, content: msg.content };
+  });
+}
+
 // ─── Route handler ─────────────────────────────────────────────────────────
 
 export async function POST(req: Request) {
   try {
-    const { messages, productContext }: { messages: ChatMessage[]; productContext?: ProductContext } =
+    const {
+      messages,
+      productContext,
+      pdfData,
+    }: { messages: ChatMessage[]; productContext?: ProductContext; pdfData?: string } =
       await req.json();
 
     if (!messages || messages.length === 0) {
@@ -194,12 +231,13 @@ export async function POST(req: Request) {
     }
 
     const systemPrompt = buildSystemPrompt(productContext);
+    const anthropicMessages = buildAnthropicMessages(messages, pdfData);
 
     const response = await client.messages.create({
       model: 'claude-sonnet-4-5',
       max_tokens: 1024,
       system: systemPrompt,
-      messages,
+      messages: anthropicMessages,
     });
 
     return Response.json(response);

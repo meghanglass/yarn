@@ -1,9 +1,14 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { X, Upload, Sparkles, ArrowRight, RotateCcw, Lock } from 'lucide-react';
+import { X, Upload, Sparkles, ArrowRight, RotateCcw, Lock, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { useAI } from '@/contexts/AIContext';
+
+interface PdfAttachment {
+  name: string;
+  base64: string;
+}
 
 type ProjectType = 'Sweter' | 'Czapka' | 'Koc' | 'Skarpety' | 'Inne';
 const projectTypes: ProjectType[] = ['Sweter', 'Czapka', 'Koc', 'Skarpety', 'Inne'];
@@ -136,7 +141,9 @@ export function AIPanel() {
   const [prompt, setPrompt] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [pdfAttachment, setPdfAttachment] = useState<PdfAttachment | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Reset conversation when panel opens with a new product
   useEffect(() => {
@@ -145,8 +152,26 @@ export function AIPanel() {
       setPrompt('');
       setSelectedProject(null);
       setError(null);
+      setPdfAttachment(null);
     }
   }, [isOpen, currentProduct?.id]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as ArrayBuffer;
+      const bytes = new Uint8Array(result);
+      let binary = '';
+      bytes.forEach((b) => (binary += String.fromCharCode(b)));
+      const base64 = btoa(binary);
+      setPdfAttachment({ name: file.name, base64 });
+    };
+    reader.readAsArrayBuffer(file);
+    // Reset input so the same file can be re-selected if removed and re-added
+    e.target.value = '';
+  };
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
@@ -157,15 +182,19 @@ export function AIPanel() {
 
   const handleSubmit = async () => {
     const text = [selectedProject, prompt.trim()].filter(Boolean).join(' — ');
-    if (!text) return;
+    if (!text && !pdfAttachment) return;
 
-    const userMessage: Message = { role: 'user', content: text };
+    const userMessage: Message = { role: 'user', content: text || '(wzór w PDF)' };
     const nextMessages = [...messages, userMessage];
     setMessages(nextMessages);
     setPrompt('');
     setSelectedProject(null);
     setIsLoading(true);
     setError(null);
+
+    // PDF is only sent with the first user message; clear it from UI after send
+    const pdfToSend = messages.length === 0 ? pdfAttachment : null;
+    if (pdfToSend) setPdfAttachment(null);
 
     try {
       const res = await fetch('/api/chat', {
@@ -181,6 +210,7 @@ export function AIPanel() {
                 gauge: currentProduct.gauge.stitches,
               }
             : undefined,
+          pdfData: pdfToSend?.base64 ?? undefined,
         }),
       });
 
@@ -210,6 +240,7 @@ export function AIPanel() {
   };
 
   const hasConversation = messages.length > 0 || isLoading;
+  const canSubmit = !isLoading && (!!prompt.trim() || !!selectedProject || !!pdfAttachment);
 
   return (
     <>
@@ -376,15 +407,13 @@ export function AIPanel() {
             />
             <button
               onClick={handleSubmit}
-              disabled={isLoading || (!prompt.trim() && !selectedProject)}
+              disabled={!canSubmit}
               className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-200"
               style={{
-                background: isLoading || (!prompt.trim() && !selectedProject)
+                background: !canSubmit
                   ? 'rgba(74,110,138,0.3)'
                   : 'linear-gradient(135deg, #4A6E8A 0%, #3a5870 100%)',
-                boxShadow: isLoading || (!prompt.trim() && !selectedProject)
-                  ? 'none'
-                  : '0 4px 16px rgba(74,110,138,0.4)',
+                boxShadow: !canSubmit ? 'none' : '0 4px 16px rgba(74,110,138,0.4)',
               }}
             >
               <ArrowRight size={16} className="text-white" />
@@ -393,16 +422,53 @@ export function AIPanel() {
 
           {/* PDF upload — only before first message */}
           {!hasConversation && (
-            <button
-              type="button"
-              className="flex items-center justify-center gap-2 w-full rounded-xl py-2 font-body text-xs transition-all duration-200"
-              style={{ background: 'rgba(255,255,255,0.03)', border: '1px dashed rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.35)' }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,110,138,0.4)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.55)'; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.12)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.35)'; }}
-            >
-              <Upload size={12} />
-              Wgraj PDF wzoru
-            </button>
+            <>
+              {/* Hidden file input */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pdf"
+                className="hidden"
+                onChange={handleFileChange}
+              />
+
+              {pdfAttachment ? (
+                /* Attached file feedback */
+                <div
+                  className="flex items-center gap-2 rounded-xl px-3 py-2 font-body text-xs"
+                  style={{ background: 'rgba(74,110,138,0.18)', border: '1px solid rgba(74,110,138,0.35)' }}
+                >
+                  <FileText size={13} style={{ color: 'rgba(130,190,210,0.8)', flexShrink: 0 }} />
+                  <span className="flex-1 truncate" style={{ color: 'rgba(255,255,255,0.7)' }}>
+                    {pdfAttachment.name}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setPdfAttachment(null)}
+                    className="shrink-0 transition-colors"
+                    style={{ color: 'rgba(255,255,255,0.35)' }}
+                    onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.7)')}
+                    onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.35)')}
+                    aria-label="Usuń plik"
+                  >
+                    <X size={13} />
+                  </button>
+                </div>
+              ) : (
+                /* Upload trigger button */
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex items-center justify-center gap-2 w-full rounded-xl py-2 font-body text-xs transition-all duration-200"
+                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px dashed rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.35)' }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,110,138,0.4)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.55)'; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.12)'; (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.35)'; }}
+                >
+                  <Upload size={12} />
+                  Wgraj PDF wzoru
+                </button>
+              )}
+            </>
           )}
 
           <p className="font-body text-[10px] text-center" style={{ color: 'rgba(255,255,255,0.2)' }}>
