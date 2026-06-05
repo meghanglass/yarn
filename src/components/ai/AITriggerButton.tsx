@@ -262,7 +262,7 @@ export function AITriggerButton({ product, variant = 'button' }: AITriggerButton
 
   return (
     <Button variant="secondary" onClick={() => openPanel(product)}>
-      Jak działa asystent?
+      Wypróbuj asystenta →
     </Button>
   );
 }
