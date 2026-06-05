@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { X, Upload, Sparkles, ArrowRight, RotateCcw, Lock, FileText } from 'lucide-react';
-import Link from 'next/link';
 import { useAI } from '@/contexts/AIContext';
+import { MarkdownRenderer } from './MarkdownRenderer';
 
 interface PdfAttachment {
   name: string;
@@ -19,77 +19,18 @@ interface Message {
   pdfName?: string; // set on first user message when PDF was attached
 }
 
-/* ─── Render assistant text — converts markdown links to Next.js Links ─── */
-function renderContent(text: string) {
-  // Split on markdown links: [text](url)
-  const parts = text.split(/(\[[^\]]+\]\([^)]+\))/g);
-  return parts.map((part, i) => {
-    const match = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
-    if (match) {
-      return (
-        <Link
-          key={i}
-          href={match[2]}
-          className="underline decoration-white/30 hover:decoration-white/70 transition-colors"
-          style={{ color: 'rgba(130,190,210,0.9)' }}
-        >
-          {match[1]}
-        </Link>
-      );
-    }
-    // Render **bold** inline
-    const boldParts = part.split(/(\*\*[^*]+\*\*)/g);
-    return boldParts.map((bp, j) => {
-      const bold = bp.match(/^\*\*([^*]+)\*\*$/);
-      if (bold) return <strong key={j} className="font-medium text-white/90">{bold[1]}</strong>;
-      return <span key={j}>{bp}</span>;
-    });
-  });
-}
-
 /* ─── Assistant message bubble ─── */
 function AssistantBubble({ content }: { content: string }) {
-  // Split into paragraphs for readability
-  const paragraphs = content.split(/\n\n+/).filter(Boolean);
   return (
     <div className="flex gap-3 items-start">
       <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#5A82A0] to-[#344F63] flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
         <Sparkles size={12} className="text-white" />
       </div>
       <div
-        className="flex-1 rounded-2xl rounded-tl-sm px-4 py-3 space-y-2"
+        className="flex-1 rounded-2xl rounded-tl-sm px-4 py-3"
         style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.12)' }}
       >
-        {paragraphs.map((para, i) => {
-          // Bullet list lines
-          const lines = para.split('\n');
-          const isList = lines.every((l) => l.startsWith('- ') || l.startsWith('* ') || l.match(/^[\d]+\. /));
-          if (isList) {
-            return (
-              <ul key={i} className="space-y-1 pl-1">
-                {lines.map((line, j) => (
-                  <li key={j} className="flex gap-2 font-body text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.78)' }}>
-                    <span style={{ color: 'rgba(255,255,255,0.3)' }}>—</span>
-                    <span>{renderContent(line.replace(/^[-*]\s+/, '').replace(/^\d+\.\s+/, ''))}</span>
-                  </li>
-                ))}
-              </ul>
-            );
-          }
-          // Heading line (starts with ##)
-          if (para.startsWith('## ') || para.startsWith('# ')) {
-            return (
-              <p key={i} className="font-body text-[10px] uppercase tracking-widest pt-1" style={{ color: 'rgba(255,255,255,0.35)' }}>
-                {para.replace(/^#+\s+/, '')}
-              </p>
-            );
-          }
-          return (
-            <p key={i} className="font-body text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.78)' }}>
-              {renderContent(para)}
-            </p>
-          );
-        })}
+        <MarkdownRenderer content={content} />
       </div>
     </div>
   );
