@@ -65,7 +65,7 @@ export function Hero() {
                 <img src={heroImages[1]} alt="" className="w-full h-full object-cover" />
               </div>
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 pt-16">
               <div className="overflow-hidden" style={{ aspectRatio: '4/3' }}>
                 <img src={heroImages[2]} alt="" className="w-full h-full object-cover transform rotate-[-2deg] scale-105" />
               </div>
