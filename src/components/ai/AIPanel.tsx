@@ -16,6 +16,7 @@ const projectTypes: ProjectType[] = ['Sweter', 'Czapka', 'Koc', 'Skarpety', 'Inn
 interface Message {
   role: 'user' | 'assistant';
   content: string;
+  pdfName?: string; // set on first user message when PDF was attached
 }
 
 /* ─── Render assistant text — converts markdown links to Next.js Links ─── */
@@ -95,14 +96,25 @@ function AssistantBubble({ content }: { content: string }) {
 }
 
 /* ─── User message bubble ─── */
-function UserBubble({ content }: { content: string }) {
+function UserBubble({ content, pdfName }: { content: string; pdfName?: string }) {
   return (
     <div className="flex justify-end">
       <div
-        className="max-w-[80%] rounded-2xl rounded-tr-sm px-4 py-3 font-body text-sm text-white leading-relaxed"
+        className="max-w-[80%] rounded-2xl rounded-tr-sm px-4 py-3 font-body text-sm text-white leading-relaxed space-y-2"
         style={{ background: 'rgba(74,110,138,0.45)', border: '1px solid rgba(74,110,138,0.4)' }}
       >
-        {content}
+        {pdfName && (
+          <div
+            className="flex items-center gap-2 rounded-lg px-2.5 py-1.5 -mx-1"
+            style={{ background: 'rgba(255,255,255,0.12)' }}
+          >
+            <FileText size={12} style={{ color: 'rgba(200,230,240,0.9)', flexShrink: 0 }} />
+            <span className="text-[11px] truncate max-w-[200px]" style={{ color: 'rgba(200,230,240,0.85)' }}>
+              {pdfName}
+            </span>
+          </div>
+        )}
+        {content !== '(wzór w PDF)' && <span>{content}</span>}
       </div>
     </div>
   );
@@ -184,7 +196,11 @@ export function AIPanel() {
     const text = [selectedProject, prompt.trim()].filter(Boolean).join(' — ');
     if (!text && !pdfAttachment) return;
 
-    const userMessage: Message = { role: 'user', content: text || '(wzór w PDF)' };
+    const userMessage: Message = {
+      role: 'user',
+      content: text || '(wzór w PDF)',
+      pdfName: pdfAttachment?.name,
+    };
     const nextMessages = [...messages, userMessage];
     setMessages(nextMessages);
     setPrompt('');
@@ -320,7 +336,7 @@ export function AIPanel() {
           {/* Conversation history */}
           {messages.map((msg, i) =>
             msg.role === 'user'
-              ? <UserBubble key={i} content={msg.content} />
+              ? <UserBubble key={i} content={msg.content} pdfName={msg.pdfName} />
               : <AssistantBubble key={i} content={msg.content} />
           )}
 
