@@ -14,16 +14,11 @@ const weightLabels: Record<string, string> = {
   'super-bulky': 'Super Bulky',
 };
 
-const GAUGE_MIN = 10;
-const GAUGE_MAX = 36;
-
 interface InlineProductCardProps {
   product: YarnProduct;
 }
 
 export function InlineProductCard({ product }: InlineProductCardProps) {
-  const gaugePct = Math.min(100, Math.max(0, ((product.gauge.stitches - GAUGE_MIN) / (GAUGE_MAX - GAUGE_MIN)) * 100));
-
   return (
     <Link
       href={`/products/${product.slug}`}
@@ -58,13 +53,10 @@ export function InlineProductCard({ product }: InlineProductCardProps) {
           </span>
         </div>
 
-        {/* Mini gauge */}
-        <div className="w-full bg-linen rounded-full" style={{ height: 3 }}>
-          <div
-            className="h-full bg-forest rounded-full"
-            style={{ width: `${gaugePct}%` }}
-          />
-        </div>
+        {/* Gauge text */}
+        <span className="font-body text-xs text-warm-grey">
+          {product.gauge.stitches} oczka / 10cm
+        </span>
 
         {/* Price + CTA */}
         <div className="flex items-center justify-between gap-2 mt-auto">
