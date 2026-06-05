@@ -1,23 +1,24 @@
 import Link from 'next/link';
+import { CATEGORY_IMAGES } from '@/lib/yarn-photos';
 
 const categories = [
   {
     slug: 'fingering',
     name: 'Fingering & Lace',
     description: 'Do skarpet i chust.',
-    image: 'https://picsum.photos/seed/cat-fingering/800/600',
+    image: CATEGORY_IMAGES['fingering'],
   },
   {
     slug: 'dk',
     name: 'DK & Worsted',
     description: 'Wszechstronne. Swetrów ponad.',
-    image: 'https://picsum.photos/seed/cat-dk/800/600',
+    image: CATEGORY_IMAGES['dk'],
   },
   {
     slug: 'bulky',
     name: 'Bulky',
     description: 'Szybkie projekty.',
-    image: 'https://picsum.photos/seed/cat-bulky/800/600',
+    image: CATEGORY_IMAGES['bulky'],
   },
 ];
 

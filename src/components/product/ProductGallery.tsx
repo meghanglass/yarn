@@ -14,14 +14,13 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
   const allImages = images.length > 1
     ? images
     : (() => {
-        // Extract seed from picsum URL (e.g. "yarn-p09") and generate variants
-        const match = images[0].match(/\/seed\/([^/]+)\//);
-        if (match) {
-          const base = `https://picsum.photos/seed`;
+        // Generate 3 Unsplash crop variants from a single image URL
+        const base = images[0].split('?')[0];
+        if (base.includes('unsplash.com')) {
           return [
-            images[0],
-            `${base}/${match[1]}-b/600/800`,
-            `${base}/${match[1]}-c/600/800`,
+            `${base}?w=600&h=800&fit=crop&crop=center&q=80`,
+            `${base}?w=600&h=800&fit=crop&crop=top&q=80`,
+            `${base}?w=600&h=800&fit=crop&crop=bottom&q=80`,
           ];
         }
         return [images[0], images[0], images[0]];

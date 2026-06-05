@@ -1,3 +1,5 @@
+import { EDITORIAL_IMAGE } from '@/lib/yarn-photos';
+
 export function EditorialStrip() {
   return (
     <section className="bg-cream overflow-hidden">
@@ -6,7 +8,7 @@ export function EditorialStrip() {
           {/* Image */}
           <div className="overflow-hidden" style={{ minHeight: '480px' }}>
             <img
-              src="https://picsum.photos/seed/editorial-yarn/900/600"
+              src={EDITORIAL_IMAGE}
               alt="Włóczka z charakterem"
               className="w-full h-full object-cover"
             />

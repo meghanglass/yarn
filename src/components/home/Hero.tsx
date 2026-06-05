@@ -3,13 +3,9 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { AITriggerButton } from '@/components/ai/AITriggerButton';
+import { HERO_IMAGES } from '@/lib/yarn-photos';
 
-const heroImages = [
-  'https://picsum.photos/seed/yarn-warm1/400/530',
-  'https://picsum.photos/seed/yarn-warm2/340/460',
-  'https://picsum.photos/seed/yarn-warm3/380/500',
-  'https://picsum.photos/seed/yarn-warm4/360/480',
-];
+const heroImages = HERO_IMAGES;
 
 export function Hero() {
   return (

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { YarnProduct } from '@/lib/types';
+import { getProductImageUrl } from '@/lib/yarn-photos';
 
 const weightLabels: Record<string, string> = {
   lace: 'Lace',
@@ -28,7 +29,7 @@ export function InlineProductCard({ product }: InlineProductCardProps) {
       {/* Image */}
       <div className="shrink-0 rounded-sm overflow-hidden" style={{ width: 60, height: 80 }}>
         <img
-          src={`https://picsum.photos/seed/yarn-${product.id}/60/80`}
+          src={getProductImageUrl(product, { w: 60, h: 80 })}
           alt={product.name}
           className="w-full h-full object-cover"
           width={60}
