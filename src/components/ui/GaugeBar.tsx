@@ -17,7 +17,7 @@ export function GaugeBar({ stitches, mini = false }: GaugeBarProps) {
     <div className={clsx('w-full', mini ? 'py-1' : 'py-2')}>
       {!mini && (
         <div className="flex justify-between items-center mb-1">
-          <span className="font-body text-xs text-warm-grey uppercase tracking-widest">Gauge</span>
+          <span className="font-body text-xs text-warm-grey uppercase tracking-widest">Gęstość (gauge)</span>
           <span className="font-body text-xs text-charcoal">{stitches} oczek/10cm</span>
         </div>
       )}

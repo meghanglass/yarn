@@ -7,7 +7,7 @@ const steps = [
   {
     number: '02',
     title: 'Sprawdź asystenta',
-    description: 'Podaj gauge i skład ze wzoru.',
+    description: 'Podaj gęstość (gauge) i skład ze wzoru.',
   },
   {
     number: '03',

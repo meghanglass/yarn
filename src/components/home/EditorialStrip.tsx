@@ -25,7 +25,7 @@ export function EditorialStrip() {
               znaczenie.
             </h2>
             <p className="font-body text-base text-warm-grey leading-relaxed mb-8 max-w-xs">
-              Dlatego podajemy gauge, skład, metraż i warunki pielęgnacji dla każdego produktu w sklepie.
+              Dlatego podajemy gęstość (gauge), skład, metraż i warunki pielęgnacji dla każdego produktu w sklepie.
               Na etykietach producenta i w naszym asystencie AI.
             </p>
             <button className="font-body text-sm text-forest hover:underline self-start">

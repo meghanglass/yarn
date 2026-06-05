@@ -1,6 +1,6 @@
 export function Marquee() {
   const items = [
-    'YARN OVER', 'MERINO', 'ALPACA', 'BAWEŁNA', 'FINGERING', 'DK WEIGHT', 'GAUGE MATCH', 'WORSTED', 'LACE', 'NATURALNE WŁÓKNA',
+    'YARN OVER', 'MERINO', 'ALPACA', 'BAWEŁNA', 'FINGERING', 'DK WEIGHT', 'GĘSTOŚĆ (GAUGE)', 'WORSTED', 'LACE', 'NATURALNE WŁÓKNA',
   ];
   const text = items.join('  ·  ') + '  ·  ';
 

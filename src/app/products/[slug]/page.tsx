@@ -60,7 +60,7 @@ export default function ProductPage({ params }: { params: Promise<{ slug: string
                 {[
                   ['Skład', product.composition.join(', ')],
                   ['Metraż', `${product.yardage}m / ${product.weightGrams}g`],
-                  ['Gauge', `${product.gauge.stitches} oczek / ${product.gauge.rows} rzędów na 10cm`],
+                  ['Gęstość (gauge)', `${product.gauge.stitches} oczek / ${product.gauge.rows} rzędów na 10cm`],
                   ['Rozmiar drutu', product.gauge.needleSize],
                   ['Tagi', product.tags.join(', ')],
                 ].map(([k, v]) => (

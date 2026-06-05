@@ -154,7 +154,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
         </p>
         <dl className="space-y-2">
           {[
-            ['Gauge', `${product.gauge.stitches} oczek / 10cm`],
+            ['Gęstość (gauge)', `${product.gauge.stitches} oczek / 10cm`],
             ['Waga', weightLabels[product.weight]],
             ['Skład', product.composition.join(', ')],
             ['Metraż', `${product.yardage}m / ${product.weightGrams}g`],

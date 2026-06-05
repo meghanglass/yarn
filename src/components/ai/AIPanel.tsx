@@ -270,7 +270,7 @@ export function AIPanel() {
           {/* Product context bubble */}
           {currentProduct && !hasConversation && (
             <AssistantBubble
-              content={`Widzę, że patrzysz na ${currentProduct.name} — ${currentProduct.weight}, gauge ${currentProduct.gauge.stitches} oczek/10cm. Do jakiego projektu jej szukasz?`}
+              content={`Widzę, że patrzysz na ${currentProduct.name} — ${currentProduct.weight}, gęstość (gauge) ${currentProduct.gauge.stitches} oczek/10cm. Do jakiego projektu jej szukasz?`}
             />
           )}
 
@@ -342,7 +342,7 @@ export function AIPanel() {
               placeholder={
                 hasConversation
                   ? 'Kontynuuj rozmowę…'
-                  : "Opisz wzór: np. 'sweter DK, gauge 22 oczka, zamiennik za Drops Lima'"
+                  : "Opisz wzór: np. 'sweter DK, gęstość (gauge) 22 oczka, zamiennik za Drops Lima'"
               }
               className="ai-panel-textarea flex-1 font-body text-sm resize-none outline-none rounded-xl px-4 py-3 transition-all duration-200"
               style={{

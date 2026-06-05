@@ -15,8 +15,8 @@ interface AITriggerButtonProps {
 
 /* ─── Mock chat messages shown in the preview ─── */
 const mockMessages = [
-  { role: 'user',      text: 'Szukam zamiennika za Drops Lima DK do swetra. Gauge 22 oczka.' },
-  { role: 'assistant', text: 'Znalazłam trzy opcje z identycznym gauge. Najlepiej pasuje BC Garn Semilla — 100% bawełna organiczna, 22 st/10cm, 52 zł.' },
+  { role: 'user',      text: 'Szukam zamiennika za Drops Lima DK do swetra. Gęstość (gauge) 22 oczka.' },
+  { role: 'assistant', text: 'Znalazłam trzy opcje z identyczną gęstością. Najlepiej pasuje BC Garn Semilla — 100% bawełna organiczna, 22 st/10cm, 52 zł.' },
   { role: 'user',      text: 'A co z metrażem? Potrzebuję ok. 1000m.' },
   { role: 'assistant', text: 'Semilla ma 175m/100g, więc potrzebujesz ok. 6 motków — razem 312 zł. Mam ją dostępną w 5 kolorach.' },
 ];
@@ -97,14 +97,14 @@ function AIFeatureStrip({ onOpen }: { onOpen: () => void }) {
             {/* Body */}
             <p className="font-body text-base leading-relaxed mb-8 max-w-md"
               style={{ color: 'rgba(255,255,255,0.5)' }}>
-              Powiedz nam co robisz i jaki masz gauge.
+              Powiedz nam co robisz i jaką masz gęstość (gauge).
               Odpowiemy wprost: pasuje, nie pasuje —
               i podamy konkretne zamienniki z uzasadnieniem.
             </p>
 
             {/* Feature pills */}
             <div className="flex flex-wrap gap-2 mb-8">
-              {['Dopasowanie gauge', 'Zamienniki włóczek', 'Przelicznik oczek', 'Skład i pielęgnacja'].map((f) => (
+              {['Dopasowanie gęstości (gauge)', 'Zamienniki włóczek', 'Przelicznik oczek', 'Skład i pielęgnacja'].map((f) => (
                 <span key={f}
                   className="font-body text-xs px-3 py-1.5 rounded-full"
                   style={{
