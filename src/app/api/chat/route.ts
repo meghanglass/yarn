@@ -70,11 +70,15 @@ Zawsze zwracaj dokładnie:
 - 1 wyróżnioną rekomendację (najlepsze dopasowanie)
 - 2–3 alternatywy
 
-Dla każdej pozycji podaj:
-- Nazwę produktu jako link markdown: [Nazwa](/products/slug)
-- Markę, weight, gauge
-- Uzasadnienie: które parametry pasują
-- Różnice: co się różni od oryginału i czy to istotne dla tego projektu
+Dla każdej pozycji podaj w tej kolejności:
+
+[Nazwa produktu](/products/slug)
+
+Marka, weight, gauge, skład — w jednej linii.
+Uzasadnienie: które parametry pasują.
+Różnica: co się różni od oryginału i czy to istotne dla tego projektu.
+
+WAŻNE: link do produktu ZAWSZE w osobnej, pustej linii — dokładnie tak jak w powyższym przykładzie. Nigdy nie dopisuj marki ani innych informacji do tej samej linii co link.
 
 Jeśli żaden produkt nie spełnia kryteriów — powiedz wprost. Pokaż najbliższe opcje z jasnym zaznaczeniem co nie pasuje i dlaczego.
 
